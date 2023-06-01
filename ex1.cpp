@@ -101,14 +101,14 @@ void divider(){
 
 #pragma endregion
 
-int sair(Fila* senhasCriadas, Fila* senhasRespondidas){
+int sair(Fila* senhasGeradas, Fila* senhasAtendidas){
 
-    if(!isEmpty(senhasCriadas)){
+    if(!isEmpty(senhasGeradas)){
         cout << "O programa não pode ser finalizado até que todas as senhas sejam antedidas" << endl;
         return 0;
     }
 
-    int qtdSenhasAtendidas = count(senhasRespondidas);
+    int qtdSenhasAtendidas = count(senhasAtendidas);
     string msgSenhasAtendidasEsperando = (qtdSenhasAtendidas == 1
                 ? " foi antedida"
                 : " foram atendidas");
@@ -120,39 +120,39 @@ int sair(Fila* senhasCriadas, Fila* senhasRespondidas){
     return 1;
 }
 
-void gerarSenha(Fila* senhasCriadas){
+void gerarSenha(Fila* senhasGeradas){
     int novaSenha;
 
-    if(isEmpty(senhasCriadas)){
+    if(isEmpty(senhasGeradas)){
         novaSenha = 1;
     }else{
-        novaSenha = senhasCriadas->final->dado + 1;
+        novaSenha = senhasGeradas->final->dado + 1;
     }
 
-    enqueue(senhasCriadas, novaSenha);
+    enqueue(senhasGeradas, novaSenha);
 
     cout << "Senha " << novaSenha << " gerada com sucesso!" << endl;
 }
 
-void realizarAtendimento(Fila* senhasCriadas, Fila* senhasRespondidas){
+void realizarAtendimento(Fila* senhasGeradas, Fila* senhasAtendidas){
     int senhaAtendida;
 
-    senhaAtendida = dequeue(senhasCriadas);
+    senhaAtendida = dequeue(senhasGeradas);
 
     if(senhaAtendida == -1){
         cout << "Não há senhas a serem atendidas " << endl;
     }else{
-        enqueue(senhasRespondidas, senhaAtendida);
+        enqueue(senhasAtendidas, senhaAtendida);
 
         cout << "Senha " << senhaAtendida << " atendida com sucesso!" << endl;
     }
 }
 
-int selecionarOpcaoMenu(Fila* senhasCriadas){
+int selecionarOpcaoMenu(Fila* senhasGeradas){
     int opcao;
 
-    if(!isEmpty(senhasCriadas)){
-        int qtdSenhas = count(senhasCriadas);
+    if(!isEmpty(senhasGeradas)){
+        int qtdSenhas = count(senhasGeradas);
         string msgSenhasEsperando = (qtdSenhas == 1
                 ? " senha esperando para ser atendida"
                 : " senhas esperando para serem atendidas");
@@ -178,8 +178,8 @@ int main(int argc, char** argv){
 
     int opcao;
     bool canExit = false;
-    Fila* senhasRespondidas = init();
-    Fila* senhasCriadas = init();
+    Fila* senhasAtendidas = init();
+    Fila* senhasGeradas = init();
 
     cout << fixed;
     cout << "Bem-vindo ao projeto bilheteria";
@@ -187,21 +187,21 @@ int main(int argc, char** argv){
 
     while (!canExit)
     {        
-        opcao = selecionarOpcaoMenu(senhasCriadas);
+        opcao = selecionarOpcaoMenu(senhasGeradas);
         
         divider();
         switch (opcao)
         {
             case SAIR:
-                canExit = sair(senhasCriadas, senhasRespondidas);
+                canExit = sair(senhasGeradas, senhasAtendidas);
             break;
 
             case GERAR_SENHA:
-                gerarSenha(senhasCriadas);
+                gerarSenha(senhasGeradas);
             break;
 
             case REALIZAR_ATENDIMENTO:
-                realizarAtendimento(senhasCriadas, senhasRespondidas);
+                realizarAtendimento(senhasGeradas, senhasAtendidas);
             break;
 
             default:
@@ -213,8 +213,8 @@ int main(int argc, char** argv){
 
     }       
 
-    freeFila(senhasCriadas);
-    freeFila(senhasRespondidas);
+    freeFila(senhasGeradas);
+    freeFila(senhasAtendidas);
 
     return 0;
 }
